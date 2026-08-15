@@ -1,0 +1,169 @@
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding-bottom: calc(var(--bottom-nav-height) + var(--sp-xxl));
+}
+
+.page {
+  padding: var(--sp-lg) var(--page-padding);
+  display: none;
+}
+
+.page.active {
+  display: block;
+  animation: fadeIn 0.2s ease forwards;
+}
+
+.full-page {
+  position: absolute;
+  inset: 0;
+  z-index: 300;
+  background-color: var(--bg);
+  display: none;
+}
+.full-page.active {
+  display: flex;
+  animation: fadeIn 0.2s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Page Transition Animation */
+.page-active-animate {
+  animation: pageTransition 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pageTransition {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Entry Flow Animations */
+@keyframes splashFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes logoPop {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes subtitleSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Premium Motion Details */
+.btn-primary, .btn-secondary, .btn-outlined {
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+.btn-primary:active, .btn-secondary:active, .btn-outlined:active {
+  transform: scale(0.96) !important;
+}
+
+.icon-btn, .back-btn {
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease !important;
+}
+.icon-btn:active {
+  transform: scale(0.9) !important;
+}
+
+.chip {
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
+}
+.chip:active {
+  transform: scale(0.95) !important;
+}
+
+.quick-access-item {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background-color 0.25s ease !important;
+}
+.quick-access-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(6, 18, 88, 0.08) !important;
+}
+.quick-access-item:active {
+  transform: translateY(-2px) scale(0.97);
+}
+
+.room-snapshot, .app-card[onclick], .service-card[onclick], .alert-item[onclick] {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease !important;
+}
+.room-snapshot:hover, .app-card[onclick]:hover, .service-card[onclick]:hover, .alert-item[onclick]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(6, 18, 88, 0.06) !important;
+}
+.room-snapshot:active, .app-card[onclick]:active, .service-card[onclick]:active, .alert-item[onclick]:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Pulsing Active Step */
+.dot.pulsing {
+  animation: pulseDot 2s infinite;
+}
+@keyframes pulseDot {
+  0% {
+    box-shadow: 0 0 0 0 rgba(50, 109, 240, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(50, 109, 240, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(50, 109, 240, 0);
+  }
+}
+
+/* Floating Weather Sun Icon */
+.weather-card svg {
+  animation: floatSun 4s ease-in-out infinite;
+}
+@keyframes floatSun {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-2px) rotate(15deg);
+  }
+}
+
+/* Custom transitions for Drawer and Overlay */
+.drawer {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.drawer-overlay {
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
