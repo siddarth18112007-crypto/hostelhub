@@ -1,0 +1,209 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+  STAFF
+}
+
+enum ResourceStatus {
+  AVAILABLE
+  OCCUPIED
+  RESERVED
+  MAINTENANCE
+}
+
+enum NoticePriority {
+  URGENT
+  IMPORTANT
+  GENERAL
+}
+
+model User {
+  id             String                   @id @default(uuid())
+  email          String                   @unique
+  passwordHash   String
+  studentId      String?                  @unique
+  name           String
+  role           Role                     @default(STUDENT)
+  course         String?
+  batch          String?
+  block          String?
+  room           String?
+  floor          String?
+  createdAt      DateTime                 @default(now())
+  updatedAt      DateTime                 @updatedAt
+  
+  laundryBookings      LaundryBooking[]
+  repairRequests       RepairRequest[]
+  eventRegistrations   EventRegistration[]
+  resourceReservations ResourceReservation[]
+  alerts               Alert[]
+  preferences          NotificationPreference?
+}
+
+model Room {
+  id        String   @id @default(uuid())
+  number    String
+  block     String
+  floor     String
+  capacity  Int
+  occupied  Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model RoomInventory {
+  id        String   @id @default(uuid())
+  roomNum   String
+  item      String
+  quantity  Int
+  status    String   @default("GOOD")
+  updatedAt DateTime @updatedAt
+}
+
+model MessMenu {
+  id        String   @id @default(uuid())
+  mealType  String   @unique // breakfast, lunch, snacks, dinner
+  time      String
+  items     String[] // list of food items
+  updatedAt DateTime @updatedAt
+}
+
+model LaundrySlot {
+  id        String   @id @default(uuid())
+  date      String   // Today, Tomorrow, etc.
+  time      String   // e.g. 10:00 AM – 11:00 AM
+  machine   String
+  capacity  Int      @default(1)
+  occupied  Int      @default(0)
+  bookings  LaundryBooking[]
+}
+
+model LaundryBooking {
+  id            String      @id @default(uuid())
+  userId        String
+  laundrySlotId String
+  status        String      @default("Booked") // Booked, Completed, Cancelled
+  createdAt     DateTime    @default(now())
+
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slot          LaundrySlot @relation(fields: [laundrySlotId], references: [id], onDelete: Cascade)
+}
+
+model RepairRequest {
+  id            String         @id @default(uuid())
+  userId        String
+  issue         String
+  room          String
+  technician    String         @default("Unassigned")
+  status        String         @default("Reported") // Reported, Assigned, Scheduled, In Progress, Completed
+  scheduledTime String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  updates       RepairUpdate[]
+}
+
+model RepairUpdate {
+  id              String        @id @default(uuid())
+  repairRequestId String
+  status          String
+  notes           String?
+  createdAt       DateTime      @default(now())
+
+  repairRequest   RepairRequest @relation(fields: [repairRequestId], references: [id], onDelete: Cascade)
+}
+
+model Event {
+  id                  String              @id @default(uuid())
+  title               String
+  date                String
+  time                String
+  venue               String
+  type                String              @default("General")
+  status              String              @default("Upcoming") // Upcoming, Completed
+  maxCapacity         Int                 @default(100)
+  currentCount        Int                 @default(0)
+  deadline            String
+  createdAt           DateTime            @default(now())
+
+  registrations       EventRegistration[]
+}
+
+model EventRegistration {
+  id        String   @id @default(uuid())
+  userId    String
+  eventId   String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+}
+
+model Resource {
+  id          String         @id @default(uuid())
+  name        String         @unique
+  category    String
+  description String
+  location    String
+  status      ResourceStatus @default(AVAILABLE)
+  createdAt   DateTime       @default(now())
+
+  reservations ResourceReservation[]
+}
+
+model ResourceReservation {
+  id         String   @id @default(uuid())
+  userId     String
+  resourceId String
+  timeSlot   String
+  createdAt  DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+}
+
+model Notice {
+  id           String         @id @default(uuid())
+  title        String
+  message      String
+  priority     NoticePriority @default(GENERAL)
+  publishedDate String
+  expiryDate   String?
+  createdAt    DateTime       @default(now())
+}
+
+model Alert {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String   // mess, laundry, repair, events, notice, smart
+  title     String
+  message   String
+  time      String
+  unread    Boolean  @default(true)
+  category  String   // Smart Alerts, Notices, Updates
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model NotificationPreference {
+  id               String  @id @default(uuid())
+  userId           String  @unique
+  messUpdates      Boolean @default(true)
+  laundryReminders Boolean @default(true)
+  repairUpdates    Boolean @default(true)
+  eventReminders   Boolean @default(true)
+  notices          Boolean @default(true)
+  smartAlerts      Boolean @default(true)
+
+  user             User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
