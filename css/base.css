@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-family: var(--font-family);
+  background-color: var(--bg);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background-color: var(--primary-light);
+  color: var(--deep-navy);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#app {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  background-color: var(--bg);
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.hidden {
+  display: none !important;
+}
