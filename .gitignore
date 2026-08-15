@@ -1,0 +1,19 @@
+# Flutter/Dart/Pub related
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+
+# IDE files
+.idea/
+.vscode/
+
+# Generated files
+*.iml
+*.ipr
+*.iws
+*.swp
+
+# macOS
+.DS_Store
