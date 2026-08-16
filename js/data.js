@@ -170,21 +170,20 @@ const AppData = {
   drawerMenu: {
     account: [
       { label: 'My Profile', icon: 'user', page: 'profile' },
-      { label: 'My Hostel Details', icon: 'room' }
+      { label: 'My Room', icon: 'bed-double', page: 'room' }
     ],
     activity: [
-      { label: 'Notifications', icon: 'bell', page: 'alerts' },
-      { label: 'All Notices', icon: 'megaphone', page: 'alerts' },
-      { label: 'My Schedule', icon: 'schedule' }
+      { label: 'Alerts & Notices', icon: 'bell', page: 'alerts' },
+      { label: 'My Schedule', icon: 'calendar', page: 'schedule' }
     ],
     preferences: [
       { label: 'Settings', icon: 'settings', page: 'settings' },
-      { label: 'Notification Preferences', icon: 'notification-prefs' }
+      { label: 'Notification Preferences', icon: 'sliders-horizontal', page: 'notification-prefs' }
     ],
     support: [
       { label: 'Help & Support', icon: 'help-circle', page: 'help' },
-      { label: 'Report a Problem', icon: 'report' },
-      { label: 'About HostelHub', icon: 'about' }
+      { label: 'Report a Problem', icon: 'flag', page: 'report' },
+      { label: 'About HostelHub', icon: 'info', page: 'about' }
     ]
   }
 };
