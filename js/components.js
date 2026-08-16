@@ -48,10 +48,13 @@ const Components = {
   },
   
   drawer() {
+    const user = window.ApiService ? ApiService.getCurrentUser() : null;
+    const name = user ? user.name : (AppData.student.name || 'Student');
+    const id = user ? (user.id || user.email) : AppData.student.id;
     let html = `
       <div class="drawer-header">
         <div style="font-size: var(--fs-section); font-weight: 700; margin-bottom: 4px;">Hostel<span style="color: var(--primary)">Hub</span></div>
-        <div style="font-size: var(--fs-small); color: var(--text-secondary);">${AppData.student.name} • ${AppData.student.id}</div>
+        <div style="font-size: var(--fs-small); color: var(--text-secondary);">${name} • ${id}</div>
       </div>
     `;
     
@@ -67,9 +70,10 @@ const Components = {
         <div class="section-title">${title}</div>`;
         
       AppData.drawerMenu[key].forEach(item => {
+        const page = item.page || 'home';
         html += `
-          <div class="drawer-item" onclick="Components.toggleDrawer(); Router.navigate('${item.page}')">
-            ${this.getLucideIcon(item.icon)}
+          <div class="drawer-item" onclick="Components.toggleDrawer(); Router.navigate('${page}')">
+            <span style="display:flex;align-items:center;width:20px;height:20px;flex-shrink:0;">${this.getLucideIcon(item.icon, 20)}</span>
             <span>${item.label}</span>
           </div>
         `;
@@ -79,8 +83,8 @@ const Components = {
     
     html += `
       <div class="drawer-section">
-        <div class="drawer-item danger" onclick="Components.toggleDrawer(); Router.navigate('login')">
-          ${this.getLucideIcon('log-out')}
+        <div class="drawer-item danger" onclick="Components.toggleDrawer(); if(window.ApiService) ApiService.logout(); Router.navigate('login')">
+          <span style="display:flex;align-items:center;width:20px;height:20px;flex-shrink:0;">${this.getLucideIcon('log-out', 20)}</span>
           <span>Log Out</span>
         </div>
       </div>
